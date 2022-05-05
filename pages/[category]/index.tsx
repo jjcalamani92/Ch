@@ -27,11 +27,7 @@ const LinePage: NextPage<Props> = ({ category }) => {
 };
 
 export const getStaticPaths: GetStaticPaths = () => {
-	const paths = [
-		{ params: { category: "linea-automotiva" } },
-		{ params: { category: "servicios" } },
-		{ params: { category: "contacto" } }
-	];
+	const paths = [{ params: { category: "linea-automotiva" } }];
 	return {
 		paths,
 		fallback: false // false or 'blocking',
