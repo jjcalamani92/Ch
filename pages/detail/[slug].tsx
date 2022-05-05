@@ -1,9 +1,9 @@
-import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
-import { useProduct } from '../../hooks';
-import { IProduct } from '../../interfaces';
-import { connectToDatabase } from '../../mongodb';
-import { Layout } from '../../src/components';
-import { DetailLayout } from '../../src/layouts';
+import { GetStaticPaths, GetStaticProps, NextPage } from "next";
+import { useProduct } from "../../hooks";
+import { IProduct } from "../../interfaces";
+import { connectToDatabase } from "../../mongodb";
+import { Layout } from "../../src/components";
+import { DetailLayout } from "../../src/layouts";
 
 interface Props {
 	product: IProduct;
@@ -11,13 +11,13 @@ interface Props {
 
 const ProductPage: NextPage<Props> = ({ product }) => {
 	const { products, isLoading } = useProduct(
-		'/paintworkproducts?category=linea-automotiva'
+		"/paintworkproducts?category=linea-automotiva"
 	);
 	return (
 		<Layout
 			title={`${product.title}`}
 			pageDescription={`${product.description}`}
-			imageFullUrl={`${product.image[1]}`}
+			imageFullUrl={`${product.image[0]}`}
 		>
 			<DetailLayout
 				product={product}
@@ -35,14 +35,14 @@ interface ProductSlug {
 
 const getAllProductSlugs = async (): Promise<ProductSlug[]> => {
 	const { db } = await connectToDatabase();
-	const slugs = await db.collection('paintworkproducts').find().toArray();
+	const slugs = await db.collection("paintworkproducts").find().toArray();
 
 	return slugs;
 };
 
 const getProductBySlug = async (slug: string): Promise<IProduct | null> => {
 	const { db } = await connectToDatabase();
-	const product = await db.collection('paintworkproducts').findOne({ slug });
+	const product = await db.collection("paintworkproducts").findOne({ slug });
 	if (!product) {
 		return null;
 	}
@@ -58,7 +58,7 @@ export const getStaticPaths: GetStaticPaths = async (ctx) => {
 				slug
 			}
 		})),
-		fallback: 'blocking'
+		fallback: "blocking"
 	};
 };
 
@@ -69,13 +69,13 @@ export const getStaticPaths: GetStaticPaths = async (ctx) => {
 // //- The page must be pre-rendered (for SEO) and be very fast — getStaticProps generates HTML and JSON files, both of which can be cached by a CDN for performance.
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-	const { slug = '' } = params as { slug: string };
+	const { slug = "" } = params as { slug: string };
 	const product = await getProductBySlug(slug);
 
 	if (!product) {
 		return {
 			redirect: {
-				destination: '/',
+				destination: "/",
 				permanent: false
 			}
 		};
